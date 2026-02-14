@@ -55,6 +55,8 @@ printf(int fd, const char *fmt, ...)
       }
     } else if(state == '%'){
       if(c == 'd'){
+        if(*ap < 0)
+          putc(fd,'-');
         printint(fd, *ap, 10, 1);
         ap++;
       } else if(c == 'x' || c == 'p'){

@@ -2,13 +2,13 @@
 #include "stat.h"
 #include "user.h"
 
+#define MAX_NUMBERS 100
 #define SHIFT_AMOUNT 8
 #define SHIFT_MASK ((1 << SHIFT_AMOUNT) - 1)
 
-// Newton–Raphson
+// Newton–Raphson for fixed-point square root
 int sqrt_xv6(int x) {
-  if (x <= 0)
-    return 0;
+  if (x <= 0) return 0;
   int guess = x;
   int prev;
   do {
@@ -18,56 +18,74 @@ int sqrt_xv6(int x) {
   return guess;
 }
 
+void bubble_sort(int arr[], int n) {
+    int i, j, temp;
+
+    for (i = 0; i < n - 1; i++) {
+        // Last i elements are already in place
+        for (j = 0; j < n - i - 1; j++) {
+            if (arr[j] > arr[j + 1]) {
+                // Swap arr[j] and arr[j + 1]
+                temp = arr[j];
+                arr[j] = arr[j + 1];
+                arr[j + 1] = temp;
+            }
+        }
+    }
+}
+
 int main(int argc, char *argv[]) {
   if (argc < 2) {
-    printf(1,"must have 2 or more numbers\n");
-    return 0;
+    printf(1, "Usage: printstats <num1> <num2> ...\n");
+    exit();
   }
 
-  int i, val;
-  int n = argc - 1;
-  int min = atoi(argv[1]);
-  int max = atoi(argv[1]);
-  int std_dev = 0, mean = 0, avg = 0;
+  int numbers[MAX_NUMBERS];
+  int n = 0;
+  int avg = 0;
+  int std_dev = 0;
+  int min = 0, max = 0;
 
-  /* SUM / MIN / MAX */
-  for (i = 1; i < argc; i++) {
-    val = atoi(argv[i]);
-    avg = avg + val;
-    if (min > val)
-      min = val;
-    if (max < val)
-      max = val;
+
+  for (int i = 1; i < argc && n < MAX_NUMBERS; i++) {
+    numbers[n] = atoi(argv[i]);
+    
+
+      if (numbers[n] < min) min = numbers[n];
+      if (numbers[n] > max) max = numbers[n];
+    
+    avg += numbers[n];
+    n++;
   }
 
-  /* AVERAGE (Q8.8) */
-  avg = avg << SHIFT_AMOUNT;
-  avg = avg / n;
 
-  /* STANDARD DEVIATION */
-  for (i = 1; i < argc; i++) {
-    val = atoi(argv[i]) << SHIFT_AMOUNT;
+  avg = (avg << SHIFT_AMOUNT) / n;
 
+
+
+  for (int i = 0; i < n; i++) {
+    int val = numbers[i] << SHIFT_AMOUNT;
     std_dev += ((val - avg) * (val - avg)) >> SHIFT_AMOUNT;
   }
-  std_dev = std_dev / n;       // variance
-  std_dev = sqrt_xv6(std_dev); // std deviation
-
-  /* MEDIAN (ASSUMES SORTED INPUT) */
+  
+  std_dev = sqrt_xv6(std_dev / n);
+  
+  bubble_sort(numbers, n);
+  int median;
   if (n % 2 == 0)
-    mean = (atoi(argv[n / 2]) + atoi(argv[n / 2 + 1])) / 2;
+    median = ((numbers[(n / 2) - 1] << SHIFT_AMOUNT) + (numbers[n / 2] << SHIFT_AMOUNT)) / 2;
   else
-    mean = atoi(argv[n / 2 + 1]);
+    median = numbers[n / 2] << SHIFT_AMOUNT;
 
   /* PRINTING */
-  printf(1,"AVERAGE: %d.%d\n", avg / (1 << SHIFT_AMOUNT),
+  printf(1, "AVERAGE: %d.%d\n", avg / (1 << SHIFT_AMOUNT),
          ((avg < 0 ? -avg : avg) & SHIFT_MASK) * 1000 >> SHIFT_AMOUNT);
-  printf(1,"STD DEVIATION: %d.%d\n", std_dev / (1 << SHIFT_AMOUNT),
-         ((std_dev < 0 ? -std_dev : std_dev) & SHIFT_MASK) * 1000 >>
-             SHIFT_AMOUNT);
-  printf(1,"MEDIAN: %d\n", mean);
-  printf(1,"MIN: %d\n", min);
-  printf(1,"MAX: %d\n", max);
+  printf(1, "STD DEVIATION: %d.%d\n", std_dev / (1 << SHIFT_AMOUNT),
+         ((std_dev < 0 ? -std_dev : std_dev) & SHIFT_MASK) * 1000 >> SHIFT_AMOUNT);
+  printf(1, "MEDIAN: %d.%d\n", median / (1 << SHIFT_AMOUNT),
+         ((median < 0 ? -median : median) & SHIFT_MASK) * 1000 >> SHIFT_AMOUNT);
+  printf(1, "MIN: %d\n", min);
+  printf(1, "MAX: %d\n", max);
 
   exit();
 }

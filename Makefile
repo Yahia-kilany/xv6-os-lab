@@ -176,6 +176,7 @@ UPROGS=\
 	_ls\
 	_mkdir\
 	_rm\
+	_save\
 	_sh\
 	_stressfs\
 	_usertests\

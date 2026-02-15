@@ -37,7 +37,7 @@ void* memset(void*, int, uint);
 void* malloc(uint);
 void free(void*);
 int atoi(const char*);
-
+int atof(const char *s);
 //sort.c
 void mergeSort(int*, int, int);
 void merge(int*, int, int, int); 

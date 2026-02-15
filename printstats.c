@@ -1,10 +1,8 @@
 #include "types.h"
 #include "stat.h"
 #include "user.h"
+#include "param.h"
 
-#define MAX_NUMBERS 100
-#define SHIFT_AMOUNT 8
-#define SHIFT_MASK ((1 << SHIFT_AMOUNT) - 1)
 
 // Newton–Raphson for fixed-point square root
 int sqrt_xv6(int x) {
@@ -48,9 +46,8 @@ int main(int argc, char *argv[]) {
 
 
   for (int i = 1; i < argc && n < MAX_NUMBERS; i++) {
-    numbers[n] = atoi(argv[i]);
-    
-
+      numbers[n] = atof(argv[i]);
+      if (n == 0)      min = max = numbers[n];
       if (numbers[n] < min) min = numbers[n];
       if (numbers[n] > max) max = numbers[n];
     
@@ -59,12 +56,12 @@ int main(int argc, char *argv[]) {
   }
 
 
-  avg = (avg << SHIFT_AMOUNT) / n;
+  avg = (avg) / n;
 
 
 
   for (int i = 0; i < n; i++) {
-    int val = numbers[i] << SHIFT_AMOUNT;
+    int val = numbers[i];
     std_dev += ((val - avg) * (val - avg)) >> SHIFT_AMOUNT;
   }
   
@@ -73,9 +70,9 @@ int main(int argc, char *argv[]) {
   bubble_sort(numbers, n);
   int median;
   if (n % 2 == 0)
-    median = ((numbers[(n / 2) - 1] << SHIFT_AMOUNT) + (numbers[n / 2] << SHIFT_AMOUNT)) / 2;
+    median = ((numbers[(n / 2) - 1]) + (numbers[n / 2])) / 2;
   else
-    median = numbers[n / 2] << SHIFT_AMOUNT;
+    median = numbers[n / 2];
 
   /* PRINTING */
   printf(1, "AVERAGE: %d.%d\n", avg / (1 << SHIFT_AMOUNT),
@@ -84,8 +81,10 @@ int main(int argc, char *argv[]) {
          ((std_dev < 0 ? -std_dev : std_dev) & SHIFT_MASK) * 1000 >> SHIFT_AMOUNT);
   printf(1, "MEDIAN: %d.%d\n", median / (1 << SHIFT_AMOUNT),
          ((median < 0 ? -median : median) & SHIFT_MASK) * 1000 >> SHIFT_AMOUNT);
-  printf(1, "MIN: %d\n", min);
-  printf(1, "MAX: %d\n", max);
+  printf(1, "MIN: %d.%d\n", min / (1 << SHIFT_AMOUNT),
+         ((min < 0 ? -min : min) & SHIFT_MASK) * 1000 >> SHIFT_AMOUNT);
+  printf(1, "MAX: %d.%d\n", max / (1 << SHIFT_AMOUNT),
+         ((max < 0 ? -max : max) & SHIFT_MASK) * 1000 >> SHIFT_AMOUNT);
 
   exit();
 }

@@ -11,4 +11,6 @@
 #define LOGSIZE      (MAXOPBLOCKS*3)  // max data blocks in on-disk log
 #define NBUF         (MAXOPBLOCKS*3)  // size of disk block cache
 #define FSSIZE       1000  // size of file system in blocks
-
+#define MAX_NUMBERS 100 // Maximum amount of numbers supported
+#define SHIFT_AMOUNT 8 // Number of fractional bits for fixed-point representation (Q8.8 format)
+#define SHIFT_MASK ((1 << SHIFT_AMOUNT) - 1) // Mask for extracting the fractional part of a fixed-point number

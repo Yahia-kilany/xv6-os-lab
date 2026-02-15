@@ -3,7 +3,7 @@
 #include "fcntl.h"
 #include "user.h"
 #include "x86.h"
-
+#include "param.h"
 char*
 strcpy(char *s, const char *t)
 {
@@ -96,6 +96,42 @@ atoi(const char *s)
     n = n*10 + *s++ - '0';
   return n*sign;
 }
+
+int atof(const char *s)
+{
+    int sign = 1;
+    int integer = 0;
+    int fraction = 0;
+    int fraction_scale = 1;
+
+    if (*s == '-' || *s == '+') {
+        sign = (*s == '-') ? -1 : 1;
+        s++;
+    }
+
+    while ('0' <= *s && *s <= '9') {
+        integer = integer * 10 + (*s - '0');
+        s++;
+    }
+
+    if (*s == '.') {
+        s++;
+        while ('0' <= *s && *s <= '9') {
+            fraction = fraction * 10 + (*s - '0');
+            fraction_scale *= 10;
+            s++;
+        }
+    }
+
+    int result = integer << SHIFT_AMOUNT;
+
+    if (fraction_scale > 1) {
+        result += (fraction << SHIFT_AMOUNT) / fraction_scale;
+    }
+
+    return sign * result;
+}
+
 
 void*
 memmove(void *vdst, const void *vsrc, int n)

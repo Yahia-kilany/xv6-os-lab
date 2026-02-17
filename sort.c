@@ -41,7 +41,7 @@ void mergeSort(int A[], int l, int r) {
     merge(A, l, m, r);
 }
 
-// Print fixed-point number with 3 decimal places (same as your friend's code)
+// Print fixed-point number with 3 decimal places
 void print_fixed(int num) {
     int integer_part = num >> SHIFT_AMOUNT;
     int fractional_part = ((num < 0 ? -num : num) & SHIFT_MASK) * 1000 >> SHIFT_AMOUNT;
@@ -74,7 +74,7 @@ int main(int argc, char *argv[]) {
         exit();
     }
     
-    // Parse command line arguments using atof (like your friend's code)
+    // Parse command line arguments using atof
     for (int i = 1; i < argc && count < MAX_NUMBERS; i++) {
         numbers[count] = atof(argv[i]);
         count++;

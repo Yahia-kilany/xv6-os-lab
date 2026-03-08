@@ -442,3 +442,61 @@ sys_pipe(void)
   fd[1] = fd1;
   return 0;
 }
+
+int sys_rmdir(void) {
+  char *path;
+  struct inode *ip, *dp;
+  char name[DIRSIZ];
+  uint off;
+
+  if(argstr(0, &path) < 0)
+    return -1;
+  
+  begin_op();
+  if((dp = nameiparent(path, name)) == 0){
+    end_op();
+    return -1;
+  }
+  
+  ilock(dp);
+
+  if ((ip = dirlookup(dp, name, &off)) == 0) {
+    iunlockput(dp);
+    end_op();
+    return -1;
+  }
+
+  ilock(ip);
+
+  if (ip->type != T_DIR || !isdirempty(ip)) {
+    iunlockput(ip);
+    iunlockput(dp);
+    end_op();
+    return -1;
+  }
+
+  if (namecmp(name, ".") == 0 || namecmp(name, "..") == 0) {
+    iunlockput(ip);
+    iunlockput(dp);
+    end_op();
+    return -1;
+  }
+
+  struct dirent de;
+  memset(&de, 0, sizeof(de));
+  if (writei(dp, (char*)&de, off, sizeof(de)) != sizeof(de)) {
+    panic("rmdir: writei");
+  }
+
+  ip->nlink--;
+  iupdate(ip);
+
+  dp->nlink--;
+  iupdate(dp);
+
+  iunlockput(ip);
+  iunlockput(dp);
+  
+  end_op();
+  return 0;
+}

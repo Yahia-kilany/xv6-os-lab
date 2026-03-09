@@ -24,7 +24,11 @@ char* sbrk(int);
 int sleep(int);
 int uptime(void);
 int rmdir(const char*);
+<<<<<<< HEAD
 int getprocesscount(void);
+=======
+int date(struct rtcdate*);
+>>>>>>> 7f054b1 (add date() syscall)
 
 // ulib.c
 int stat(const char*, struct stat*);

@@ -30,4 +30,9 @@ SYSCALL(sbrk)
 SYSCALL(sleep)
 SYSCALL(uptime)
 SYSCALL(rmdir)
+<<<<<<< HEAD
 SYSCALL(getprocesscount)
+=======
+SYSCALL(date)
+
+>>>>>>> 7f054b1 (add date() syscall)

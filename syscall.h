@@ -21,4 +21,8 @@
 #define SYS_mkdir  20
 #define SYS_close  21
 #define SYS_rmdir  22
+<<<<<<< HEAD
 #define SYS_getprocesscount  23
+=======
+#define SYS_date   24
+>>>>>>> 7f054b1 (add date() syscall)

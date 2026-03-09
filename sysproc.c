@@ -13,6 +13,7 @@ struct spinlock lock;
 struct proc proc[NPROC];
 }ptable;
 
+
 int
 sys_fork(void)
 {
@@ -97,6 +98,7 @@ sys_uptime(void)
 }
 
 int 
+<<<<<<< HEAD
 sys_getprocesscount(void)
 {
 struct proc *p;
@@ -107,4 +109,12 @@ if(p->state != UNUSED) count++;
 }
 release(&ptable.lock);
 return count;
+=======
+sys_date(void){
+  struct rtcdate *r;
+  if(argptr(0, (void*)&r, sizeof(struct rtcdate*)) < 0)
+    return -1;
+  cmostime(r);
+  return 0;
+>>>>>>> 7f054b1 (add date() syscall)
 }

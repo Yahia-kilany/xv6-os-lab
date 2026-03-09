@@ -104,12 +104,8 @@ extern int sys_wait(void);
 extern int sys_write(void);
 extern int sys_uptime(void);
 extern int sys_rmdir(void);
-<<<<<<< HEAD
 extern int sys_getprocesscount(void);
-
-=======
 extern int sys_date(void);
->>>>>>> 7f054b1 (add date() syscall)
 static int (*syscalls[])(void) = {
 [SYS_fork]    sys_fork,
 [SYS_exit]    sys_exit,
@@ -133,11 +129,8 @@ static int (*syscalls[])(void) = {
 [SYS_mkdir]   sys_mkdir,
 [SYS_close]   sys_close,
 [SYS_rmdir]   sys_rmdir,
-<<<<<<< HEAD
 [SYS_getprocesscount]  sys_getprocesscount,
-=======
 [SYS_date]    sys_date,
->>>>>>> 7f054b1 (add date() syscall)
 };
 
 void

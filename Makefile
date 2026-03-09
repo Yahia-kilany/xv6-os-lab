@@ -182,11 +182,8 @@ UPROGS=\
 	_wc\
 	_zombie\
 	_rmdir\
-<<<<<<< HEAD
 	_testgetprocesscount\
-=======
 	_date\
->>>>>>> 7f054b1 (add date() syscall)
 
 fs.img: mkfs README $(UPROGS)
 	./mkfs fs.img README $(UPROGS)

@@ -23,3 +23,5 @@
 #define SYS_rmdir  22
 #define SYS_getprocesscount  23
 #define SYS_date   24
+#define SYS_setpriority  25
+#define SYS_printptable  26

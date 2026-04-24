@@ -108,6 +108,8 @@ void            exit(void);
 int             fork(void);
 int             growproc(int);
 int             kill(int);
+void            printptable(void);
+int             setpriority(int, int);
 struct cpu*     mycpu(void);
 struct proc*    myproc();
 void            pinit(void);

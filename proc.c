@@ -88,6 +88,7 @@ allocproc(void)
 found:
   p->state = EMBRYO;
   p->pid = nextpid++;
+  p->priority = 10;
 
   release(&ptable.lock);
 
@@ -198,6 +199,7 @@ fork(void)
   }
   np->sz = curproc->sz;
   np->parent = curproc;
+  np->priority = curproc->priority;
   *np->tf = *curproc->tf;
 
   // Clear %eax so that fork returns 0 in the child.
@@ -494,6 +496,55 @@ kill(int pid)
   }
   release(&ptable.lock);
   return -1;
+}
+
+int
+setpriority(int pid, int pr)
+{
+  struct proc *p;
+  int old;
+
+  if(pid <= 0 || pr < 0)
+    return -1;
+
+  acquire(&ptable.lock);
+  for(p = ptable.proc; p < &ptable.proc[NPROC]; p++){
+    if(p->pid == pid && p->state != UNUSED){
+      old = p->priority;
+      p->priority = pr;
+      release(&ptable.lock);
+      return old;
+    }
+  }
+  release(&ptable.lock);
+  return -1;
+}
+
+void
+printptable(void)
+{
+  static char *states[] = {
+  [UNUSED]    "unused",
+  [EMBRYO]    "embryo",
+  [SLEEPING]  "sleep ",
+  [RUNNABLE]  "runble",
+  [RUNNING]   "run   ",
+  [ZOMBIE]    "zombie"
+  };
+  struct proc *p;
+  char *state;
+
+  acquire(&ptable.lock);
+  for(p = ptable.proc; p < &ptable.proc[NPROC]; p++){
+    if(p->state == UNUSED)
+      continue;
+    if(p->state >= 0 && p->state < NELEM(states) && states[p->state])
+      state = states[p->state];
+    else
+      state = "???";
+    cprintf("%s %d %s %d\n", p->name, p->pid, state, p->priority);
+  }
+  release(&ptable.lock);
 }
 
 //PAGEBREAK: 36

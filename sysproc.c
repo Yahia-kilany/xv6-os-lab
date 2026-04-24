@@ -117,3 +117,21 @@ sys_date(void){
   cmostime(r);
   return 0;
 }
+
+int
+sys_setpriority(void)
+{
+  int pid;
+  int pr;
+
+  if(argint(0, &pid) < 0 || argint(1, &pr) < 0)
+    return -1;
+  return setpriority(pid, pr);
+}
+
+int
+sys_printptable(void)
+{
+  printptable();
+  return 0;
+}

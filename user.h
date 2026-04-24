@@ -26,6 +26,8 @@ int uptime(void);
 int rmdir(const char*);
 int getprocesscount(void);
 int date(struct rtcdate*);
+int setpriority(int, int);
+int printptable(void);
 
 // ulib.c
 int stat(const char*, struct stat*);

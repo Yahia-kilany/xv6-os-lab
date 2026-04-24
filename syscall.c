@@ -106,6 +106,8 @@ extern int sys_uptime(void);
 extern int sys_rmdir(void);
 extern int sys_getprocesscount(void);
 extern int sys_date(void);
+extern int sys_setpriority(void);
+extern int sys_printptable(void);
 static int (*syscalls[])(void) = {
 [SYS_fork]    sys_fork,
 [SYS_exit]    sys_exit,
@@ -131,6 +133,8 @@ static int (*syscalls[])(void) = {
 [SYS_rmdir]   sys_rmdir,
 [SYS_getprocesscount]  sys_getprocesscount,
 [SYS_date]    sys_date,
+[SYS_setpriority] sys_setpriority,
+[SYS_printptable] sys_printptable,
 };
 
 void

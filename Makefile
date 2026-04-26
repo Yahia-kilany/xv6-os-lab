@@ -186,6 +186,8 @@ UPROGS=\
 	_date\
 	_setpriority\
 	_printptable\
+	_testpriority\
+	_testpriority2\
 
 fs.img: mkfs README $(UPROGS)
 	./mkfs fs.img README $(UPROGS)
@@ -255,7 +257,7 @@ qemu-nox-gdb: fs.img xv6.img .gdbinit
 EXTRA=\
 	mkfs.c ulib.c user.h cat.c echo.c forktest.c grep.c kill.c\
 	ln.c ls.c mkdir.c rm.c stressfs.c usertests.c wc.c zombie.c\
-	printf.c umalloc.c date.c setpriority.c printptable.c\
+	printf.c umalloc.c date.c setpriority.c printptable.c testpriority.c testpriority2.c\
 	README dot-bochsrc *.pl toc.* runoff runoff1 runoff.list\
 	.gdbinit.tmpl gdbutil\
 
